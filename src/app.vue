@@ -44,6 +44,7 @@
           console.log('axios mockjs', result)
           if(result.code===0) {
             this.seller = result.data
+            this.seller.score = 3.5
           }
         })
     },

@@ -34,13 +34,7 @@
           <div class="mask-main">
             <h1>{{seller.name}}</h1>
             <div class="stars-wrapper">
-              <div class="stars star-48">
-                <span class="star on"></span>
-                <span class="star on"></span>
-                <span class="star on"></span>
-                <span class="star half"></span>
-                <span class="star off"></span>
-              </div>
+              <star :score="seller.score" :size="48"></star>
             </div>
             <div class="info">
               <div class="line"></div>
@@ -73,6 +67,8 @@
 </template>
 
 <script>
+  import star from '../star/star.vue'
+
   export default {
     props: {
       seller: Object
@@ -89,6 +85,10 @@
       toggleShow () {
         this.isShow = !this.isShow
       }
+    },
+
+    components: {
+      star
     }
   }
 </script>
@@ -247,50 +247,6 @@
             height 24px
             margin 16px 0 28px 0
             text-align center
-            .stars
-              .star
-                display inline-block
-                background-repeat no-repeat
-                background-size 100% 100%
-              &.star-48
-                .star
-                  width 20px
-                  height 19px
-                  margin-right 20px
-                  &:last-child
-                    margin-right 0
-                  &.on
-                    bg-image("../star/star48_on")
-                  &.half
-                    bg-image("../star/star48_half")
-                  &.off
-                    bg-image("../star/star48_off")
-              &.star-36
-                .star
-                  width 15px
-                  height 14px
-                  margin-right 15px
-                  &:last-child
-                    margin-right 0
-                  &.on
-                    bg-image("../star/star36_on")
-                  &.half
-                    bg-image("../star/star36_half")
-                  &.off
-                    bg-image("../star/star36_off")
-              &.star-24
-                .star
-                  width 10px
-                  height 10px
-                  margin-right 10px
-                  &:last-child
-                    margin-right 0
-                  &.on
-                    bg-image("../star/star24_on")
-                  &.half
-                    bg-image("../star/star24_half")
-                  &.off
-                    bg-image("../star/star24_off")
           .info
             width 80%
             margin 0 auto
