@@ -2,93 +2,95 @@
   <div class="header">
     <div class="content-wrapper">
       <div class="avatar">
-        <img src="http://static.galileo.xiaojukeji.com/static/tms/seller_avatar_256px.jpg" >
+        <img :src="seller.avatar" >
       </div>
       <div class="content">
         <div class="title">
           <span class="brand"></span>
-          <span class="name">粥品香坊（回龙观）</span>
+          <span class="name">{{seller.name}}</span>
         </div>
-        <div class="description">蜂鸟专送/38分钟送达</div>
-        <div class="supports">
-          <span class="icon special"></span>
-          <span class="text">在线支付满28送晓飞张写真两套</span>
+        <div class="description">{{seller.description}}/{{seller.deliveryTime}}分钟送达</div>
+        <div class="supports" v-if="seller.supports">
+          <span class="icon" :class="supportClasses[seller.supports[0].type]"></span>
+          <span class="text">{{seller.supports[0].description}}</span>
         </div>
-        <div class="supports-count">
-          <span class="count">5个</span>
+        <div class="supports-count" v-if="seller.supports" @click="toggleShow">
+          <span class="count">{{seller.supports.length}}个</span>
           <span class="icon-keyboard_arrow_right"></span>
         </div>
       </div>
     </div>
-    <div class="bulletin-wrapper">
+    <div class="bulletin-wrapper" @click="toggleShow">
       <span class="bulletin-title"></span>
-      <span class="bulletin-text">粥品香坊其烹饪粥料的秘方源于中国千年古法，在融和现代制作工艺，由世界烹饪大师屈浩先生领衔研发。坚守纯天然、0添加的良心品质深得消费者青睐，发展至今成为粥类的引领品牌。是2008年奥运会和2013年园博会指定餐饮服务商。</span>
+      <span class="bulletin-text">{{seller.bulletin}}</span>
       <span class="icon-keyboard_arrow_right"></span>
     </div>
     <div class="bg">
-      <img src="http://static.galileo.xiaojukeji.com/static/tms/seller_avatar_256px.jpg" width="100%" height="100%">
+      <img :src="seller.avatar" width="100%" height="100%">
     </div>
-    <div class="mask">
-      <div class="mask-wrapper">
-        <div class="mask-main">
-          <h1>晓飞猪蹄（西部硅谷）</h1>
-          <div class="stars-wrapper">
-            <div class="stars star-48">
-              <span class="star on"></span>
-              <span class="star on"></span>
-              <span class="star on"></span>
-              <span class="star half"></span>
-              <span class="star off"></span>
+    <transition name="fade">
+      <div class="mask" v-show="isShow">
+        <div class="mask-wrapper">
+          <div class="mask-main">
+            <h1>{{seller.name}}</h1>
+            <div class="stars-wrapper">
+              <div class="stars star-48">
+                <span class="star on"></span>
+                <span class="star on"></span>
+                <span class="star on"></span>
+                <span class="star half"></span>
+                <span class="star off"></span>
+              </div>
+            </div>
+            <div class="info">
+              <div class="line"></div>
+              <div class="text">优惠信息</div>
+              <div class="line"></div>
+            </div>
+            <ul class="list" v-for="support in seller.supports">
+              <li>
+                <span class="iocn" :class="supportClasses[support.type]"></span>
+                <span>{{support.description}}</span>
+              </li>
+            </ul>
+            <div class="info">
+              <div class="line"></div>
+              <div class="text">商家公告</div>
+              <div class="line"></div>
+            </div>
+            <div class="context">
+              <p class="text">{{seller.bulletin}}</p>
             </div>
           </div>
-          <div class="info">
-            <div class="line"></div>
-            <div class="text">优惠信息</div>
-            <div class="line"></div>
-          </div>
-          <ul class="list">
-            <li>
-              <span class="iocn special"></span>
-              <span>在线支付满28送晓飞张写真</span>
-            </li>
-            <li>
-              <span class="iocn decrease"></span>
-              <span>晓飞张写真全场8折</span>
-            </li>
-            <li>
-              <span class="iocn discount"></span>
-              <span>晓飞张单人精彩套餐</span>
-            </li>
-            <li>
-              <span class="iocn guarantee"></span>
-              <span>该商家支持发票,请下单写好发票抬头</span>
-            </li>
-            <li>
-              <span class="iocn invoice"></span>
-              <span>已加入“晓飞张上门服务”计划,食品安全保障</span>
-            </li>
-          </ul>
-          <div class="info">
-            <div class="line"></div>
-            <div class="text">商家公告</div>
-            <div class="line"></div>
-          </div>
-          <div class="context">
-            <p class="text">
-              粥品香坊其烹饪粥料的秘方源于中国千年古法，在融和现代制作工艺，由世界烹饪大师屈浩先生领衔研发。坚守纯天然、0添加的良心品质深得消费者青睐，发展至今成为粥类的引领品牌。是2008年奥运会和2013年园博会指定餐饮服务商。
-            </p>
-          </div>
+        </div>
+        <div class="mask-footer" @click="toggleShow">
+          <span class="icon-close"></span>
         </div>
       </div>
-      <div class="mask-footer">
-        <span class="icon-close"></span>
-      </div>
-    </div>
+    </transition>
+
   </div>
 </template>
 
 <script>
-  export default {}
+  export default {
+    props: {
+      seller: Object
+    },
+
+    data () {
+      return {
+        isShow: false,
+        supportClasses: ['decrease', 'discount', 'guarantee', 'invoice', 'special']
+      }
+    },
+
+    methods: {
+      toggleShow () {
+        this.isShow = !this.isShow
+      }
+    }
+  }
 </script>
 
 <style lang="stylus" rel="stylesheet/stylus">
@@ -224,6 +226,10 @@
       height 100%
       background rgba(7,17,27,0.8)
       overflow auto
+      &.fade-enter-active, &.fade-leave-active
+        transition opacity .5s
+      &.fade-enter, &.fade-leave-to
+        opacity 0
       .mask-wrapper
         clearfix()
         min-height 100%

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <ele-header></ele-header>
+    <ele-header :seller="seller"></ele-header>
     <div class="tab border-1px">
       <div class="tab-item">
         <!--生成路由链接的a标签-->
@@ -24,19 +24,27 @@
 
   export default {
 
+    data () {
+      return {
+        seller: {}
+      }
+    },
 
     mounted () {
       // 使用vue-resource发送ajax请求express提供的接口
-      this.$http.get('/api/seller')
+      /*this.$http.get('/api/seller')
         .then(response => {
           const result = response.body
           console.log('vue-resource express', result)
-        })
+        })*/
       // 使用axios发送ajax请求mockjs提供的接口
       axios.get('/api2/seller')
         .then(response => {
           const result = response.data
           console.log('axios mockjs', result)
+          if(result.code===0) {
+            this.seller = result.data
+          }
         })
     },
 
