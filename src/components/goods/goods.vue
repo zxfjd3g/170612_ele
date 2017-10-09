@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="goods">
-      <div class="menu-wrapper">
+      <div class="menu-wrapper" ref="menuWrapper">
         <ul>
           <!--current-->
           <li class="menu-item" v-for="good in goods">
@@ -11,7 +11,7 @@
           </li>
         </ul>
       </div>
-      <div class="foods-wrapper">
+      <div class="foods-wrapper" ref="foodsWrapper">
         <ul>
           <li class="food-list food-list-hook" v-for="good in goods">
             <h1 class="title">{{good.name}}</h1>
@@ -45,6 +45,7 @@
 
 <script>
   import axios from 'axios'
+  import BScroll from 'better-scroll'
 
   export default {
     data () {
@@ -60,9 +61,26 @@
         .then(response => {
           const result = response.data
           if (result.code === 0) {
-            this.goods = result.data
+            this.goods = result.data // 后面会异步更新界面
+
+            /*setTimeout(() => {
+              this._initScroll()
+            }, 1)*/
+            // 将回调延迟到下次 DOM 更新循环之后执行
+            this.$nextTick(() => {
+              this._initScroll()
+            })
           }
         })
+    },
+
+    methods: {
+      _initScroll () {
+        // 创建对应左侧分类列表的scroll对象
+        new BScroll(this.$refs.menuWrapper)
+        // 创建对应右侧食物列表的scroll对象
+        new BScroll(this.$refs.foodsWrapper)
+      }
     }
   }
 </script>
