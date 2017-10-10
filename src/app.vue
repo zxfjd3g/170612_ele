@@ -14,7 +14,8 @@
       </div>
     </div>
     <!--用来标识显示当前路由组件的标签-->
-    <router-view></router-view>
+    <!--属性会传递给所有管理的路由组件-->
+    <router-view :seller="seller"></router-view>
   </div>
 </template>
 

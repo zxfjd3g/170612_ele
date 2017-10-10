@@ -42,6 +42,13 @@
           </li>
         </ul>
       </div>
+      <shopcart :minPrice="seller.minPrice"
+                :deliveryPrice="seller.deliveryPrice"
+                :foods="cartFoods"
+                :clearCart="clearCart"
+                :updateFoodCount="updateFoodCount">
+
+      </shopcart>
     </div>
   </div>
 </template>
@@ -50,8 +57,13 @@
   import axios from 'axios'
   import BScroll from 'better-scroll'
   import cartcontrol from '../cartcontrol/cartcontrol.vue'
+  import shopcart from '../shopcart/shopcart.vue'
 
   export default {
+    props: {
+      seller: Object
+    },
+
     data () {
       return {
         goods: [],
@@ -143,6 +155,12 @@
             food.count--
           }
         }
+      },
+
+      clearCart () {// 将cartFoods中的所有food的count=0
+        this.cartFoods.forEach(food => {
+          food.count = 0
+        })
       }
     },
 
@@ -164,13 +182,27 @@
         // 使用数组声明式编程的函数
         return tops.findIndex(function (top, index) {
           var nextTop = tops[index+1]
+          // 大于等于当前top && 小于等于下一个top
           return scrollY>=top && scrollY<nextTop
         })
+      },
+
+      cartFoods () { // 包含所有count>0的food
+        const foods = []
+        this.goods.forEach(good => {
+          good.foods.forEach(food => {
+            if(food.count) {
+              foods.push(food)
+            }
+          })
+        })
+        return foods
       }
     },
 
     components: {
-      cartcontrol
+      cartcontrol,
+      shopcart
     }
   }
 </script>
