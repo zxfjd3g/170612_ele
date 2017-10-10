@@ -75,6 +75,11 @@
 	3. 标识某个标签
 		ref: 得到指定的标签对象
 
+# 3. day03
+## 1). goods组件
+## 2). cartcontrol组件
+## 3). shopcart组件
+## 4). food组件
 
 
 

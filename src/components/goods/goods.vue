@@ -4,10 +4,11 @@
       <div class="menu-wrapper" ref="menuWrapper">
         <ul>
           <!--current-->
-          <li class="menu-item" v-for="good in goods">
+          <li class="menu-item" v-for="(good, index) in goods"
+              :class="{current: currentIndex===index}">
             <span class="text border-1px">
               <span class="icon" v-if="good.type>=0" :class="supportClasses[good.type]"></span>{{good.name}}
-          </span>
+            </span>
           </li>
         </ul>
       </div>
@@ -51,7 +52,9 @@
     data () {
       return {
         goods: [],
-        supportClasses: ['decrease', 'discount', 'guarantee', 'invoice', 'special']
+        supportClasses: ['decrease', 'discount', 'guarantee', 'invoice', 'special'],
+        scrollY: 0, //滚动的y坐标
+        tops: []  // li的top的数组
       }
     },
 
@@ -69,6 +72,7 @@
             // 将回调延迟到下次 DOM 更新循环之后执行
             this.$nextTick(() => {
               this._initScroll()
+              this._initTops()
             })
           }
         })
@@ -79,7 +83,55 @@
         // 创建对应左侧分类列表的scroll对象
         new BScroll(this.$refs.menuWrapper)
         // 创建对应右侧食物列表的scroll对象
-        new BScroll(this.$refs.foodsWrapper)
+        var foodsScroll = new BScroll(this.$refs.foodsWrapper, { // 配置对象
+          // startY: 100
+          probeType: 2 //会在屏幕滑动的过程中实时的派发 scroll 事件
+        })
+
+
+        //绑定指定名称(滚动)的事件监听
+        foodsScroll.on('scroll', (event) => {
+          // console.log(event.y)
+          this.scrollY = Math.abs(event.y)
+        })
+      },
+
+      _initTops () {
+        const tops = []
+        // 得到所有li
+        const lis = this.$refs.foodsWrapper.getElementsByClassName('food-list-hook')
+        // 根据lis添加top
+        let top = 0
+        tops.push(top)
+        Array.prototype.slice.call(lis).forEach(li => {
+          top += li.clientHeight
+          tops.push(top)
+        })
+        // 更新tops
+        this.tops = tops
+      }
+    },
+
+    computed: {
+      currentIndex () {
+        const {scrollY, tops} = this
+
+        // 从tops中根据scrollY找出对应的下标
+        // tops.indexOf(scrollY)
+
+        // 命令式编程
+        /*for (var i = 0; i < tops.length; i++) {
+          var top = tops[i]
+          var nextTop = tops[i+1]
+          if(scrollY>=top && scrollY<nextTop) {
+            return i
+          }
+        }*/
+        // 使用数组声明式编程的函数
+        return tops.findIndex(function (top, index) {
+          var nextTop = tops[index+1]
+          return scrollY>=top && scrollY<nextTop
+        })
       }
     }
   }
