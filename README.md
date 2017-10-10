@@ -77,8 +77,29 @@
 
 # 3. day03
 ## 1). goods组件
+	1. 滑动右侧, 左侧同步变化
+		scroll.on('scroll', (event) => {this.scrollY = Math.abs(event.y)})
+		_initTops(){}  ==> this.tops = tops
+		computed => currentIndex() => tops.findIndex() 
+		:class='{currentIndex=currentIndex===index}'
+		scroll.on('scrollend', (event) => {this.scrollY = Math.abs(event.y)})
+	2. 点击左侧, 右侧同步滑动
+		this.scroll.scrollToElement(li, 300)
+		this.scrollY = this.tops[index]
 ## 2). cartcontrol组件
+	分析设计组件的props:
+		food: Object
+		updateFoodCount: Function
+	给已经数据绑定的对象添加新的属性
+		this.$set(obj, 'xxx', value)
 ## 3). shopcart组件
+	分析设计组件的props:
+	如何向路由组件传递数据: <router-view :seller='seller'>
+	计算属性
+	如何实现单例对象
+		1.创建之前: 先判断是否已存在? 如果没有才去创建
+        2.创建这后: 将创建的对象保存起来
+	scroll对象的创建与刷新
 ## 4). food组件
 
 
