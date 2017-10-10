@@ -116,10 +116,10 @@
           console.log(event.y)
           this.scrollY = Math.abs(event.y)
         })
-        /*this.foodsScroll.on('scrollEnd', (event) => {
+        this.foodsScroll.on('scrollEnd', (event) => { // 滚动结束时回调
           console.log('scrollEnd', event.y)
           this.scrollY = Math.abs(event.y)
-        })*/
+        })
       },
 
       _initTops () {
