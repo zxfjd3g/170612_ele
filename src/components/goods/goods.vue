@@ -143,6 +143,7 @@
       },
 
       updateFoodCount (isAdd, food) {
+        console.log('updateFoodCount()')
         if(isAdd) { // 增加
           if(!food.count) {
             // food.count = 1 // 给food添加一个新的属性, 没有数据绑定

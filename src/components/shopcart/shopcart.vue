@@ -2,12 +2,12 @@
   <div>
     <div class="shopcart">
       <div class="content">
-        <div class="content-left">
+        <div class="content-left" @click="toggleShow">
           <div class="logo-wrapper">
-            <div class="logo" :class="{highlight: totoalCount>0}">
-              <i class="icon-shopping_cart" :class="{highlight: totoalCount>0}"></i>
+            <div class="logo" :class="{highlight: totalCount>0}">
+              <i class="icon-shopping_cart" :class="{highlight: totalCount>0}"></i>
             </div>
-            <div class="num" v-if="totoalCount>0">{{totoalCount}}</div>
+            <div class="num" v-if="totalCount>0">{{totalCount}}</div>
           </div>
           <div class="price">￥{{totalPrice}}</div>
           <div class="desc">另需配送费￥{{deliveryPrice}}元</div>
@@ -18,12 +18,33 @@
           </div>
         </div>
       </div>
+      <div class="ball-container"></div>
+      <div class="shopcart-list" v-show="listShow">
+        <div class="list-header">
+          <h1 class="title">购物车</h1>
+          <span class="empty" @click="clearCart">清空</span>
+        </div>
+        <div class="list-content" ref="listContent">
+          <ul>
+            <li class="food" v-for="food in foods">
+              <span class="name">{{food.name}}</span>
+              <div class="price"><span>￥{{food.price}}</span></div>
+              <div class="cartcontrol-wrapper">
+                <cartcontrol :food="food" :updateFoodCount="updateFoodCount"></cartcontrol>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </div>
     </div>
-    <div class="list-mask" style="display: none;"></div>
+    <div class="list-mask" v-show="listShow" @click="toggleShow"></div>
   </div>
 </template>
 
 <script>
+  import BScroll from 'better-scroll'
+  import cartcontrol from '../cartcontrol/cartcontrol.vue'
+
   export default {
     props: {
       minPrice: Number,
@@ -33,8 +54,14 @@
       updateFoodCount: Function
     },
 
+    data () {
+      return {
+        isShow: false
+      }
+    },
+
     computed: {
-      totoalCount () {
+      totalCount () {
         var totoal = 0
         this.foods.forEach(food => {
           totoal += food.count
@@ -44,7 +71,7 @@
       totalPrice () {
         var totoal = 0
         this.foods.forEach(food => {
-          totoal += food.count*food.price
+          totoal += food.count * food.price
         })
         return totoal
       },
@@ -52,23 +79,62 @@
       payText () {
         // ￥20元起送 还差￥10元起送 去结算
         const {totalPrice, minPrice} = this
-        if(totalPrice===0) {
+        if (totalPrice === 0) {
           return `￥${minPrice}元起送`
-        } else if(totalPrice<minPrice) {
-          return `还差￥${minPrice-totalPrice}元起送`
+        } else if (totalPrice < minPrice) {
+          return `还差￥${minPrice - totalPrice}元起送`
         } else {
           return '去结算'
         }
+      },
+
+      listShow () {
+        if(this.totalCount===0) {
+          this.isShow = false
+          return false
+        }
+        //要显示列表
+        if(this.isShow) {
+          this.$nextTick(() => {
+
+            // 如何创建一个单例(单一的实例)对象
+            // 1. 创建之前: 先判断是否已存在? 如果没有才去创建
+            // 2. 创建这后: 将创建的对象保存起来
+            if(!this.scroll) {
+              console.log('创建BScroll对象...')
+              this.scroll = new BScroll(this.$refs.listContent, {
+                click: true
+              })
+            } else {
+              this.scroll.refresh() // 刷新: 检查是否要形成滚动
+            }
+          })
+        }
+
+        return this.isShow
       }
     },
 
     methods: {
       pay () {
         const {totalPrice, minPrice, deliveryPrice} = this
-        if(totalPrice>=minPrice) {
-          alert('支付'+(totalPrice+deliveryPrice))
+        if (totalPrice >= minPrice) {
+          alert('支付' + (totalPrice + deliveryPrice))
         }
+      },
+
+      toggleShow () {
+        //如果当前数量为0, 不切换
+        if(this.totalCount===0) {
+          return
+        }
+        console.log('toggleShow()')
+        this.isShow = !this.isShow
       }
+    },
+
+    components: {
+      cartcontrol
     }
   }
 </script>
