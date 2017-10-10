@@ -5,7 +5,7 @@
         <ul>
           <!--current-->
           <li class="menu-item" v-for="(good, index) in goods"
-              :class="{current: currentIndex===index}">
+              :class="{current: currentIndex===index}" @click="clickMenuItem(index)">
             <span class="text border-1px">
               <span class="icon" v-if="good.type>=0" :class="supportClasses[good.type]"></span>{{good.name}}
             </span>
@@ -33,7 +33,9 @@
                     <span class="now">￥{{food.price}}</span>
                     <span class="old" v-show="food.oldPrice">￥{{food.oldPrice}}</span>
                   </div>
-                  <div class="cartcontrol-wrapper">cartcontrol组件</div>
+                  <div class="cartcontrol-wrapper">
+                    <cartcontrol :food="food" :updateFoodCount="updateFoodCount"></cartcontrol>
+                  </div>
                 </div>
               </li>
             </ul>
@@ -47,6 +49,7 @@
 <script>
   import axios from 'axios'
   import BScroll from 'better-scroll'
+  import cartcontrol from '../cartcontrol/cartcontrol.vue'
 
   export default {
     data () {
@@ -81,19 +84,26 @@
     methods: {
       _initScroll () {
         // 创建对应左侧分类列表的scroll对象
-        new BScroll(this.$refs.menuWrapper)
+        new BScroll(this.$refs.menuWrapper, {
+          click: true //触发点击
+        })
         // 创建对应右侧食物列表的scroll对象
-        var foodsScroll = new BScroll(this.$refs.foodsWrapper, { // 配置对象
+        this.foodsScroll = new BScroll(this.$refs.foodsWrapper, { // 配置对象
           // startY: 100
-          probeType: 2 //会在屏幕滑动的过程中实时的派发 scroll 事件
+          probeType: 2, //会在屏幕滑动(只能是用户操作)的过程中实时的派发 scroll 事件
+          click: true //触发点击
         })
 
 
         //绑定指定名称(滚动)的事件监听
-        foodsScroll.on('scroll', (event) => {
-          // console.log(event.y)
+        this.foodsScroll.on('scroll', (event) => {
+          console.log(event.y)
           this.scrollY = Math.abs(event.y)
         })
+        /*this.foodsScroll.on('scrollEnd', (event) => {
+          console.log('scrollEnd', event.y)
+          this.scrollY = Math.abs(event.y)
+        })*/
       },
 
       _initTops () {
@@ -109,6 +119,30 @@
         })
         // 更新tops
         this.tops = tops
+      },
+
+      clickMenuItem (index) {
+        // console.log('clickMenuItem()', index)
+        const li = this.$refs.foodsWrapper.getElementsByClassName('food-list-hook')[index]
+        // 右侧滑动到对应的位置
+        this.foodsScroll.scrollToElement(li, 300)
+        // 更新scrollY-->更新当前分类项
+        this.scrollY = this.tops[index]
+      },
+
+      updateFoodCount (isAdd, food) {
+        if(isAdd) { // 增加
+          if(!food.count) {
+            // food.count = 1 // 给food添加一个新的属性, 没有数据绑定
+            this.$set(food, 'count', 1)
+          } else {
+            food.count++
+          }
+        } else { // 减少
+          if(food.count) {
+            food.count--
+          }
+        }
       }
     },
 
@@ -133,6 +167,10 @@
           return scrollY>=top && scrollY<nextTop
         })
       }
+    },
+
+    components: {
+      cartcontrol
     }
   }
 </script>
