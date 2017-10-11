@@ -33,7 +33,15 @@
 
         <div class="rating">
           <h1 class="title">商品评价</h1>
-          <div>ratingselect组件</div>
+
+          <ratingselect
+            :ratings="food.ratings"
+            :selectType="selectType"
+            :onlyContent="onlyContent"
+            :desc="{all: '全部', positive:'推荐', negative: '吐糟'}"
+            :toggleOnlyContent="toggleOnlyContent"
+            :setSelectType="setSelectType"></ratingselect>
+
           <div class="rating-wrapper">
             <ul>
               <li class="rating-item border-1px" v-for="rating in filterRatings">
@@ -60,6 +68,7 @@
   import BScroll from 'better-scroll'
   import cartcontrol from '../cartcontrol/cartcontrol.vue'
   import split from '../split/split.vue'
+  import ratingselect from '../ratingselect/ratingselect.vue'
 
   export default {
     props: {
@@ -93,15 +102,25 @@
 
       setSelectType (selectType) {
         this.selectType = selectType
+        this.$nextTick(() => {
+          this.scroll.refresh()
+        })
       },
+
       toggleOnlyContent () {
         this.onlyContent = !this.onlyContent
+        this.$nextTick(() => {
+          this.scroll.refresh()
+        })
       }
     },
 
     computed: {
       filterRatings () {
         const ratings = this.food.ratings
+        if(!ratings) {
+          return []
+        }
         const {selectType, onlyContent} = this
         return ratings.filter(rating => {
           const {rateType, text} = rating
@@ -124,7 +143,8 @@
 
     components: {
       cartcontrol,
-      split
+      split,
+      ratingselect
     }
   }
 </script>
