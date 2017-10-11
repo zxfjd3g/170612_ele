@@ -47,7 +47,8 @@
                 :deliveryPrice="seller.deliveryPrice"
                 :foods="cartFoods"
                 :clearCart="clearCart"
-                :updateFoodCount="updateFoodCount">
+                :updateFoodCount="updateFoodCount"
+                ref="shopcart">
 
       </shopcart>
     </div>
@@ -146,7 +147,7 @@
         this.scrollY = this.tops[index]
       },
 
-      updateFoodCount (isAdd, food) {
+      updateFoodCount (isAdd, food, event) {
         console.log('updateFoodCount()')
         if(isAdd) { // 增加
           if(!food.count) {
@@ -155,6 +156,9 @@
           } else {
             food.count++
           }
+
+          // 启动一个小球动画
+          this.$refs.shopcart.startBallAnimation(event.target)
         } else { // 减少
           if(food.count) {
             food.count--

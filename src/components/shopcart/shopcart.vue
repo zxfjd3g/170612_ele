@@ -18,7 +18,18 @@
           </div>
         </div>
       </div>
-      <div class="ball-container"></div>
+      <div class="ball-container">
+        <transition v-for="ball in balls"
+                    @before-enter="beforeDrop"
+                    @enter="dropping"
+                    @after-enter="afterDrop">
+          <div class="ball" v-show="ball.isShow">
+            <div class="inner inner-hook"></div>
+          </div>
+        </transition>
+
+
+      </div>
       <div class="shopcart-list" v-show="listShow">
         <div class="list-header">
           <h1 class="title">购物车</h1>
@@ -56,7 +67,16 @@
 
     data () {
       return {
-        isShow: false
+        isShow: false,
+        balls: [
+          {isShow: false},
+          {isShow: false},
+          {isShow: false},
+          {isShow: false},
+          {isShow: false},
+          {isShow: false}
+        ],
+        droppingBalls: []   // 用来保存所有正在执行动画的ball对象
       }
     },
 
@@ -121,6 +141,45 @@
     },
 
     methods: {
+
+      /**
+       * 开始一个小球动画
+       * @param startEl
+       */
+      startBallAnimation (startEl) {
+        // 找到一个隐藏的小球   balls中isShow为false的ball对象
+        const ball = this.balls.find(ball => !ball.isShow)
+        if(ball) {
+          // 让它显示出
+          ball.isShow = true
+          ball.startEl = startEl // 将startEl保存到对应的ball上
+          droppingBalls.push(ball) // 保存ball
+        }
+      },
+
+      // 在显示动画开始之前调用
+      // 作用: 用来指定动画开始时的样式状态
+      beforeDrop (el) {
+        const ball = droppingBalls.shift() //移除第一个ball
+        const startEl = ball.startEl
+
+        // 计算offsetX和offsetY
+
+
+        el.style.transform = `translateY(${offsetY}px)`
+        el.children[0].transform = `translateX(${offsetX}px)`
+      },
+      // 在显示动画开始时调用
+      // 作用: 指定动画结束时的样式状态
+      dropping (el) {
+
+      },
+      // 在动画结束后调用
+      // 作用: 做一些收尾的工作: 比如隐藏小球
+      afterDrop (el) {
+
+      },
+
       pay () {
         const {totalPrice, minPrice, deliveryPrice} = this
         if (totalPrice >= minPrice) {
@@ -135,7 +194,8 @@
         }
         console.log('toggleShow()')
         this.isShow = !this.isShow
-      }
+      },
+
     },
 
     components: {
