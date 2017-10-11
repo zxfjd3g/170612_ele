@@ -22,7 +22,8 @@
         <transition v-for="ball in balls"
                     @before-enter="beforeDrop"
                     @enter="dropping"
-                    @after-enter="afterDrop">
+                    @after-enter="afterDrop"
+                    :css="false">
           <div class="ball" v-show="ball.isShow">
             <div class="inner inner-hook"></div>
           </div>
@@ -37,7 +38,7 @@
         </div>
         <div class="list-content" ref="listContent">
           <ul>
-            <li class="food" v-for="food in foods">
+            <li class="food" v-for="(food, index) in foods" :key="index">
               <span class="name">{{food.name}}</span>
               <div class="price"><span>￥{{food.price}}</span></div>
               <div class="cartcontrol-wrapper">
@@ -153,31 +154,51 @@
           // 让它显示出
           ball.isShow = true
           ball.startEl = startEl // 将startEl保存到对应的ball上
-          droppingBalls.push(ball) // 保存ball
+          this.droppingBalls.push(ball) // 保存ball
         }
       },
 
       // 在显示动画开始之前调用
       // 作用: 用来指定动画开始时的样式状态
       beforeDrop (el) {
-        const ball = droppingBalls.shift() //移除第一个ball
+        console.log('beforeDrop()')
+        const ball = this.droppingBalls.shift() //移除第一个ball
         const startEl = ball.startEl
-
         // 计算offsetX和offsetY
-
+        const {left, top} = startEl.getBoundingClientRect()
+        const elLeft = 32
+        const elBottom = 22
+        const offsetX = left-elLeft
+        const offsetY = -(window.innerHeight-top-elBottom)
 
         el.style.transform = `translateY(${offsetY}px)`
-        el.children[0].transform = `translateX(${offsetX}px)`
+        el.children[0].style.transform = `translateX(${offsetX}px)`
+
+        // 保存ball
+        el.ball = ball
       },
       // 在显示动画开始时调用
       // 作用: 指定动画结束时的样式状态
       dropping (el) {
+        console.log('dropping()')
+        // 强制重排/重绘
+        const temp = el.clientHeight  // 让当前帧立即显示
 
+        // 异步指定动画最终的状态
+        this.$nextTick(() => {
+          el.style.transform = `translateY(0)`
+          el.children[0].style.transform = `translateX(0)`
+        })
       },
       // 在动画结束后调用
       // 作用: 做一些收尾的工作: 比如隐藏小球
       afterDrop (el) {
-
+        console.log('afterDrop()')
+        const ball = el.ball
+        // 当前这个方法立即执行了, 需要延迟隐藏
+        setTimeout(() => {
+          ball.isShow = false
+        }, 400)
       },
 
       pay () {
