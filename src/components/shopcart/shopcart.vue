@@ -62,18 +62,23 @@
 
     computed: {
       totalCount () {
-        var totoal = 0
+        /*var totoal = 0
         this.foods.forEach(food => {
           totoal += food.count
         })
-        return totoal
+        return totoal*/
+        return this.foods.reduce((preTotal, food) => preTotal + food.count, 0)
       },
       totalPrice () {
-        var totoal = 0
+        /*var totoal = 0
         this.foods.forEach(food => {
           totoal += food.count * food.price
         })
-        return totoal
+        return totoal*/
+        return this.foods.reduce(
+          (preTotal, food) => preTotal + food.count*food.price,
+          0
+        )
       },
 
       payText () {
