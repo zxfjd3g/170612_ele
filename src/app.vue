@@ -44,8 +44,10 @@
           const result = response.data
           console.log('axios mockjs', result)
           if(result.code===0) {
-            this.seller = result.data
-            this.seller.score = 3.5
+            setTimeout(() => {
+              this.seller = result.data
+              this.seller.score = 3.5
+            }, 1000)
           }
         })
     },
