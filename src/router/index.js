@@ -1,8 +1,13 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
+/*
 import goods from '../components/goods/goods.vue'
 import ratings from '../components/ratings/ratings.vue'
 import seller from '../components/seller/seller.vue'
+*/
+const goods = () => import('../components/goods/goods.vue')
+const ratings = () => import('../components/ratings/ratings.vue')
+const seller = () => import('../components/seller/seller.vue')
 
 // 声明使用插件
 Vue.use(VueRouter)

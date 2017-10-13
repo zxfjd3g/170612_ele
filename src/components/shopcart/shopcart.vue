@@ -34,7 +34,8 @@
       <div class="shopcart-list" v-show="listShow">
         <div class="list-header">
           <h1 class="title">购物车</h1>
-          <span class="empty" @click="clearCart">清空</span>
+          <!--<span class="empty" @click="clearCart">清空</span>-->
+          <mt-button type="primary" @click.native="clearCart" style="float: right">清空</mt-button>
         </div>
         <div class="list-content" ref="listContent">
           <ul>
@@ -56,6 +57,7 @@
 <script>
   import BScroll from 'better-scroll'
   import cartcontrol from '../cartcontrol/cartcontrol.vue'
+  import MtButton from '../../../node_modules/mint-ui/packages/button/src/button.vue'
 
   export default {
     props: {
@@ -220,6 +222,7 @@
     },
 
     components: {
+      MtButton,
       cartcontrol
     }
   }

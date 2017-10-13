@@ -62,6 +62,7 @@
   import cartcontrol from '../cartcontrol/cartcontrol.vue'
   import shopcart from '../shopcart/shopcart.vue'
   import food from '../food/food.vue'
+  import { MessageBox, Toast} from 'mint-ui';
 
   export default {
     props: {
@@ -167,9 +168,27 @@
       },
 
       clearCart () {// 将cartFoods中的所有food的count=0
-        this.cartFoods.forEach(food => {
-          food.count = 0
-        })
+        /*if(confirm('确定清除吗?')) {
+          this.cartFoods.forEach(food => {
+            food.count = 0
+          })
+        }*/
+
+        MessageBox.confirm('确定清除吗?').then(action => {
+          console.log(action)
+          if(action==='confirm') {
+            this.cartFoods.forEach(food => {
+              food.count = 0
+            })
+            Toast({
+              message: '清除成功',
+              position: 'middle',
+              duration: 2000
+            });
+          }
+        }, () => {
+          // 处理取消的逻辑
+        });
       },
 
       showFood (food) {

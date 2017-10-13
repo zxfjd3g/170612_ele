@@ -134,7 +134,11 @@
 ## 03). 日期插件
 	moment--->date-fns
 ## 04). 优化项目
-
+	缓存路由组件
+	路由懒加载
+		利用了代码分割(code split)
+		优化首屏显示
+	使用devtool + sourceMap实现代码调试
 
 
 

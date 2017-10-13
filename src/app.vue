@@ -15,7 +15,9 @@
     </div>
     <!--用来标识显示当前路由组件的标签-->
     <!--属性会传递给所有管理的路由组件-->
-    <router-view :seller="seller"></router-view>
+    <keep-alive>
+      <router-view :seller="seller"></router-view>
+    </keep-alive>
   </div>
 </template>
 
@@ -26,6 +28,8 @@
   export default {
 
     data () {
+      debugger
+      consle.log('----')
       return {
         seller: {}
       }
