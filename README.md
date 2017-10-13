@@ -104,7 +104,7 @@
 
 
 
-1. 你说几个数组中常用的方法?
+# 你说几个数组中常用的方法?
 	1). 几个简单的方法: push(), pop(), forEach(), join(), reverse() -->就不用说了
 	2). 几个非常好用的方法: 数组的声明编程方法
 		map() --> 产生一个新的数组
@@ -113,16 +113,27 @@
 		reduce()--> 累加统计结果
 
 # 4. day04
-
 ## 01). ratingselect组件
+	列表过滤显示
+		ratings.filter()
+		&& 与 || 的使用
 ## 02). ratings组件
 ## 03). seller组件
+	数据异步显示的问题?
 ## 04). 小球动画
 	利用动画的生命周期函数来实现动画
 	小球动画在x和y轴的变化效果不一样--> 需要2个transition-->使用2个嵌套的小球div来分别使用transition
 	每个小球的动画都独立的, 每个小球div都有自己的<transition>
 
-
+# 5. day05
+## 01). vue-router
+## 02). vue相关的插件
+	vue-lazyload
+	vue-scroller
+	mint-ui/element-ui
+## 03). 日期插件
+	moment--->date-fns
+## 04). 优化项目
 
 
 

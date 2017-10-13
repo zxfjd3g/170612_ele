@@ -2,7 +2,7 @@
   <div class="header">
     <div class="content-wrapper">
       <div class="avatar">
-        <img :src="seller.avatar" >
+        <img v-lazy="seller.avatar" >
       </div>
       <div class="content">
         <div class="title">

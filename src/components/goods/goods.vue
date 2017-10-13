@@ -20,7 +20,7 @@
               <li class="food-item border-1px"
                   v-for="food in good.foods" @click="showFood(food)">
                 <div class="icon">
-                  <img width="57" height="57" :src="food.icon">
+                  <img width="57" height="57" v-lazy="food.icon">
                 </div>
 
                 <div class="content">
