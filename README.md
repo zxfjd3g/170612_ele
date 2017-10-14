@@ -127,16 +127,34 @@
 
 # 5. day05
 ## 01). vue-router
+    理解相关: 路由, SPA/MPA 基本原理
+    整体流程
+      下载
+      定义路由器模块(包含路由的注册)
+      配置路由器到vm: router
+    编写路由的流程
+      定义路由组件
+      映射成路由
+      写2个标签: <router-link>(路由链接), <router-view>(路由视图)
+    编码:
+      基本路由
+      嵌套路由
+      如何向路由组件传递数据: 路由链接 / <router-view>属性
+      缓存路由组件: <keep-alive>
 ## 02). vue相关的插件
-	vue-lazyload
-	vue-scroller
-	mint-ui/element-ui
+	vue-lazyload: 懒加载图片: <img v-lazy='imgSrc'>
+	vue-scroller: 页面滚动: <scroller>
+	mint-ui/element-ui: 
+	    vue UI component库   按需打包   
+	    组件分类: 标签组件/非标签组件   
+	    注册全局组件标签: Vue.component(tagName, component)
 ## 03). 日期插件
 	moment--->date-fns
 ## 04). 优化项目
-	缓存路由组件
+	缓存路由组件对象: <keep-alive>
 	路由懒加载
-		利用了代码分割(code split)
+		利用了代码分割(code split): 各个路由组件的代码
+		                --> 将其打成不同的js-->开始只加载一个路由组件包-->需要时才去后台请求加载
 		优化首屏显示
 	使用devtool + sourceMap实现代码调试
 ## 05). 百度地图API
