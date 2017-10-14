@@ -28,8 +28,6 @@
   export default {
 
     data () {
-      debugger
-      consle.log('----')
       return {
         seller: {}
       }
